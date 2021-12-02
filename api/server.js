@@ -25,9 +25,15 @@ server.get('/api/users', (req, res, next) => {
         res.json(users)
     }
 })
-// creates a new user
-server.post('/api/register', (req, res) => {
 
+// creates a new user
+server.post('/api/register', validateRegister, (req, res, next) => {
+    const newUser = Users.registerUser(req.body.newUser)
+    if (!newUser) {
+        next({ message: 'registration failed - please try again'})
+    } else {
+        res.status(201).json(newUser)
+    }
 })
 
 // logs user in
