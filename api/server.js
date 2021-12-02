@@ -4,8 +4,7 @@ const cors = require('cors')
 const Users = require('./api-model')
 
 const {
-    validateRegister,
-    validateLogin,
+    validateUsernamePassword,
     errorHandling,
 } = require('./api-middleware')
 
@@ -27,8 +26,8 @@ server.get('/api/users', (req, res, next) => {
 })
 
 // creates a new user
-server.post('/api/register', validateRegister, (req, res, next) => {
-    const newUser = Users.registerUser(req.body.newUser)
+server.post('/api/register', validateUsernamePassword, (req, res, next) => {
+    const newUser = Users.registerUser(req.body.user)
     if (!newUser) {
         next({ message: 'registration failed - please try again'})
     } else {
@@ -37,8 +36,15 @@ server.post('/api/register', validateRegister, (req, res, next) => {
 })
 
 // logs user in
-server.post('/api/login', (req, res) => {
-
+server.post('/api/login', validateUsernamePassword, (req, res, next) => {
+    const isLoggedIn = Users.login(req.body.user)
+    if (!isLoggedIn) {
+        next({ message: 'incorrect username or password'})
+    } else {
+        res.json({
+            message: `Welcome, ${isLoggedIn.username}!`
+        })
+    }
 })
 
 server.use(errorHandling)
