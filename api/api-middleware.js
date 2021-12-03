@@ -10,7 +10,7 @@ function validateUsernamePassword(req, res, next) {
 
 }
 
-function errorHandling(err, req, res, next) {
+function errorHandling(err, req, res) {
     res.status(err.status || 500).json({
         message: `error: ${err.message}`,
         stack: err.stack
