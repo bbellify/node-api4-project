@@ -47,6 +47,12 @@ server.post('/api/login', validateUsernamePassword, (req, res, next) => {
     }
 })
 
+server.get('*', (req, res) => {
+    res.json({
+        message: 'api live'
+    })
+})
+
 server.use(errorHandling)
 
 module.exports = server
